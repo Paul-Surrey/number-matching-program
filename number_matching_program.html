@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Number Matching Program</title>
+</head>
+<body>
+    <input type="number" id="newNumber" min="0" max="99" placeholder="Enter a number (0-99)">
+    <button onclick="addNumber()">Add Number</button>
+    <div id="results"></div>
+
+    <script>
+        let core36 = [];  // Initialize the core array
+        let matchCounts = {};  // Object to keep track of match counts
+        let topMatchList = [];  // List of top matches
+
+        function addNumber() {
+            const input = document.getElementById('newNumber');
+            const newNumber = parseInt(input.value);
+            input.value = '';  // Clear input
+
+            // Validate the number
+            if (isNaN(newNumber) || newNumber < 0 || newNumber > 99) {
+                alert("Please enter a valid number (0-99).");
+                return;
+            }
+
+            // Add new number to core36 and remove the oldest number if array is full
+            if (core36.length >= 36) {
+                const removedNumber = core36.shift();
+                matchCounts[removedNumber]--;
+                if (matchCounts[removedNumber] === 2) {
+                    topMatchList = topMatchList.filter(num => num !== removedNumber);
+                    alert(`Warning: Number ${removedNumber now matches less than three times.`);
+                }
+            }
+            core36.push(newNumber);
+
+            // Update match counts
+            if (matchCounts[newNumber] === undefined) {
+                matchCounts[newNumber] = 0;
+            }
+            matchCounts[newNumber]++;
+            if (matchCounts[newNumber] === 3) {
+                topMatchList.push(newNumber);
+            }
+
+            // Display results
+            displayResults();
+        }
+
+        function displayResults() {
+            const resultDiv = document.getElementById('results');
+            resultDiv.innerHTML = `
+                <p>Current core36: ${core36.join(', ')}</p>
+                <p><b>Top Matches:</b> ${topMatchList.map(num => `<b>${num}</b>`).join(', ')}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
